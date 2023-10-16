@@ -12,9 +12,10 @@ import {
   Settings,
 } from "lucide-react";
 
-import { useMutation, useQuery } from "convex/react";
+import { useMutation } from "convex/react";
 import { useMediaQuery } from "usehooks-ts";
 
+import DocumentList from "./document-list";
 import UserItem from "./user-item";
 import Item from "./item";
 
@@ -27,7 +28,6 @@ export default function Navigation({}: NavigationProps) {
   const pathname = usePathname();
   const isMobile = useMediaQuery("(max-width: 768px)");
 
-  const documents = useQuery(api.documents.get);
   const create = useMutation(api.documents.create);
 
   const isResizingRef = useRef(false);
@@ -144,9 +144,7 @@ export default function Navigation({}: NavigationProps) {
           <Item label="New page" onClick={handleCreate} icon={PlusCircle} />
         </div>
         <div className="mt-4">
-          {documents?.map((document) => (
-            <p key={document._id}>{document.title}</p>
-          ))}
+          <DocumentList />
         </div>
         <div
           onMouseDown={handleMouseDown}
