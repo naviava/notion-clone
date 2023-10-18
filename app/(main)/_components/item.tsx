@@ -33,7 +33,7 @@ import { api } from "@/convex/_generated/api";
 interface ItemProps {
   id?: Id<"documents">;
   label: string;
-  onClick: () => void;
+  onClick?: () => void;
   icon: LucideIcon;
   documentIcon?: string;
   active?: boolean;
@@ -79,7 +79,7 @@ export default function Item({
       const promise = create({ title: "Untitled", parentDocument: id }).then(
         (documentId) => {
           if (!expanded) onExpand?.();
-          router.push(`/documents/${documentId}`);
+          // router.push(`/documents/${documentId}`);
         },
       );
 

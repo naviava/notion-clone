@@ -7,16 +7,24 @@ import { toast } from "sonner";
 import {
   ChevronsLeft,
   MenuIcon,
+  Plus,
   PlusCircle,
   Search,
   Settings,
+  Trash,
 } from "lucide-react";
 
 import { useMutation } from "convex/react";
 import { useMediaQuery } from "usehooks-ts";
 
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import DocumentList from "./document-list";
 import UserItem from "./user-item";
+import TrashBox from "./trash-box";
 import Item from "./item";
 
 import { cn } from "@/lib/utils";
@@ -145,6 +153,18 @@ export default function Navigation({}: NavigationProps) {
         </div>
         <div className="mt-4">
           <DocumentList />
+          <Item label="Add a page" onClick={handleCreate} icon={Plus} />
+          <Popover>
+            <PopoverTrigger className="mt-4 w-full">
+              <Item label="Trash" icon={Trash} />
+            </PopoverTrigger>
+            <PopoverContent
+              side={isMobile ? "bottom" : "right"}
+              className="w-72 p-0"
+            >
+              <TrashBox />
+            </PopoverContent>
+          </Popover>
         </div>
         <div
           onMouseDown={handleMouseDown}
