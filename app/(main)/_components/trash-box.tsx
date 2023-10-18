@@ -16,9 +16,7 @@ import ConfirmModal from "@/components/modals/confirm-modal";
 
 import { api } from "@/convex/_generated/api";
 
-interface TrashBoxProps {}
-
-export default function TrashBox({}: TrashBoxProps) {
+export default function TrashBox() {
   const router = useRouter();
   const params = useParams();
 

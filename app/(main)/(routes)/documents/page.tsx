@@ -12,9 +12,7 @@ import { Button } from "@/components/ui/button";
 import { api } from "@/convex/_generated/api";
 import { toast } from "sonner";
 
-interface DocumentPageProps {}
-
-export default function DocumentPage({}: DocumentPageProps) {
+export default function DocumentPage() {
   const { user } = useUser();
   const create = useMutation(api.documents.create);
 

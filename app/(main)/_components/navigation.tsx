@@ -1,7 +1,7 @@
 "use client";
 
 import { ElementRef, useCallback, useEffect, useRef, useState } from "react";
-import { usePathname } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 
 import { toast } from "sonner";
 import {
@@ -27,14 +27,14 @@ import {
 import DocumentList from "./document-list";
 import UserItem from "./user-item";
 import TrashBox from "./trash-box";
+import Navbar from "./navbar";
 import Item from "./item";
 
 import { cn } from "@/lib/utils";
 import { api } from "@/convex/_generated/api";
 
-interface NavigationProps {}
-
-export default function Navigation({}: NavigationProps) {
+export default function Navigation() {
+  const params = useParams();
   const pathname = usePathname();
   const { onOpen: openSearch } = useSearch();
   const { onOpen: openSettings } = useSettings();
@@ -184,15 +184,19 @@ export default function Navigation({}: NavigationProps) {
           isMobile && "left-0 w-full",
         )}
       >
-        <nav className="w-full bg-transparent px-3 py-2">
-          {isCollapsed && (
-            <MenuIcon
-              role="button"
-              onClick={resetWidth}
-              className="h-6 w-6 text-muted-foreground"
-            />
-          )}
-        </nav>
+        {!!params.documentId ? (
+          <Navbar isCollapsed={isCollapsed} onResetWidth={resetWidth} />
+        ) : (
+          <nav className="w-full bg-transparent px-3 py-2">
+            {isCollapsed && (
+              <MenuIcon
+                role="button"
+                onClick={resetWidth}
+                className="h-6 w-6 text-muted-foreground"
+              />
+            )}
+          </nav>
+        )}
       </div>
     </>
   );

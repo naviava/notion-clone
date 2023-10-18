@@ -19,9 +19,7 @@ import {
 import { api } from "@/convex/_generated/api";
 import { File } from "lucide-react";
 
-interface SearchCommandProps {}
-
-export default function SearchCommand({}: SearchCommandProps) {
+export default function SearchCommand() {
   const router = useRouter();
   const { user } = useUser();
 
