@@ -16,6 +16,7 @@ import {
 
 import { useMutation } from "convex/react";
 import { useMediaQuery } from "usehooks-ts";
+import { useSearch } from "@/hooks/use-search";
 
 import {
   Popover,
@@ -34,6 +35,7 @@ interface NavigationProps {}
 
 export default function Navigation({}: NavigationProps) {
   const pathname = usePathname();
+  const search = useSearch();
   const isMobile = useMediaQuery("(max-width: 768px)");
 
   const create = useMutation(api.documents.create);
@@ -147,7 +149,7 @@ export default function Navigation({}: NavigationProps) {
         </div>
         <div>
           <UserItem />
-          <Item label="Search" onClick={() => {}} icon={Search} isSearch />
+          <Item label="Search" onClick={search.onOpen} icon={Search} isSearch />
           <Item label="Settings" onClick={() => {}} icon={Settings} />
           <Item label="New page" onClick={handleCreate} icon={PlusCircle} />
         </div>
