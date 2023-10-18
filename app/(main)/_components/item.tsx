@@ -4,15 +4,31 @@ import { useCallback } from "react";
 import { useRouter } from "next/navigation";
 
 import { toast } from "sonner";
-import { ChevronDown, ChevronRight, LucideIcon, Plus } from "lucide-react";
+import {
+  ChevronDown,
+  ChevronRight,
+  LucideIcon,
+  MoreHorizontal,
+  Plus,
+  Trash,
+} from "lucide-react";
+
+import { Id } from "@/convex/_generated/dataModel";
 
 import { useMutation } from "convex/react";
+import { useUser } from "@clerk/clerk-react";
 
 import { Skeleton } from "@/components/ui/skeleton";
+import {
+  DropdownMenu,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from "@/components/ui/dropdown-menu";
 
 import { cn } from "@/lib/utils";
 import { api } from "@/convex/_generated/api";
-import { Id } from "@/convex/_generated/dataModel";
 
 interface ItemProps {
   id?: Id<"documents">;
@@ -39,8 +55,11 @@ export default function Item({
   isSearch,
   level = 0,
 }: ItemProps) {
+  const { user } = useUser();
   const router = useRouter();
+
   const create = useMutation(api.documents.create);
+  const archive = useMutation(api.documents.archive);
 
   const ChevronIcon = expanded ? ChevronDown : ChevronRight;
 
@@ -60,7 +79,7 @@ export default function Item({
       const promise = create({ title: "Untitled", parentDocument: id }).then(
         (documentId) => {
           if (!expanded) onExpand?.();
-          // router.push(`/documents/${documentId}`);
+          router.push(`/documents/${documentId}`);
         },
       );
 
@@ -71,6 +90,22 @@ export default function Item({
       });
     },
     [create, id, expanded, onExpand, router],
+  );
+
+  const onArchive = useCallback(
+    (evt: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+      if (!id) return;
+      evt.stopPropagation();
+
+      const promise = archive({ id });
+
+      toast.promise(promise, {
+        loading: "Moving to trash",
+        success: "Note moved to trash",
+        error: "Failed to delete note",
+      });
+    },
+    [id, archive],
   );
 
   return (
@@ -105,6 +140,34 @@ export default function Item({
       )}
       {!!id && (
         <div className="ml-auto flex items-center gap-x-2">
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              asChild
+              onClick={(evt) => evt.stopPropagation()}
+            >
+              <div
+                role="button"
+                className="ml-auto h-full rounded-sm opacity-0 hover:bg-neutral-300 group-hover:opacity-100 dark:hover:bg-neutral-600"
+              >
+                <MoreHorizontal className="h-4 w-4 text-muted-foreground" />
+              </div>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent
+              className="w-60"
+              align="start"
+              side="right"
+              forceMount
+            >
+              <DropdownMenuItem onClick={onArchive}>
+                <Trash className="mr-2 h-4 w-4" />
+                Delete
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <div className="p-2 text-xs text-muted-foreground">
+                Last edited by: {user?.fullName}
+              </div>
+            </DropdownMenuContent>
+          </DropdownMenu>
           <div
             role="button"
             onClick={onCreate}
