@@ -97,7 +97,7 @@ export default function Item({
       if (!id) return;
       evt.stopPropagation();
 
-      const promise = archive({ id });
+      const promise = archive({ id }).then(() => router.push("/documents"));
 
       toast.promise(promise, {
         loading: "Moving to trash",
@@ -105,7 +105,7 @@ export default function Item({
         error: "Failed to delete note",
       });
     },
-    [id, archive],
+    [id, archive, router],
   );
 
   return (
@@ -130,7 +130,7 @@ export default function Item({
       {documentIcon ? (
         <div className="mr-2 shrink-0 text-[18px]">{documentIcon}</div>
       ) : (
-        <Icon className="mr-2 h-[18px] shrink-0 text-muted-foreground" />
+        <Icon className="mr-2 h-[18px] w-[18px] shrink-0 text-muted-foreground" />
       )}
       <span className="truncate">{label}</span>
       {isSearch && (

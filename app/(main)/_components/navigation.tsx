@@ -1,7 +1,7 @@
 "use client";
 
 import { ElementRef, useCallback, useEffect, useRef, useState } from "react";
-import { useParams, usePathname } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 
 import { toast } from "sonner";
 import {
@@ -35,6 +35,7 @@ import { api } from "@/convex/_generated/api";
 
 export default function Navigation() {
   const params = useParams();
+  const router = useRouter();
   const pathname = usePathname();
   const { onOpen: openSearch } = useSearch();
   const { onOpen: openSettings } = useSettings();
@@ -111,14 +112,16 @@ export default function Navigation() {
   }, []);
 
   const handleCreate = useCallback(() => {
-    const promise = create({ title: "Untitled" });
+    const promise = create({ title: "Untitled" }).then((documentId) =>
+      router.push(`/documents/${documentId}`),
+    );
 
     toast.promise(promise, {
       loading: "Creating a new note",
       success: "New note created",
       error: "Failed to create new note",
     });
-  }, [create]);
+  }, [create, router]);
 
   useEffect(() => {
     if (isMobile) collapseSidebar();
