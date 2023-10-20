@@ -6,6 +6,7 @@ import { MenuIcon } from "lucide-react";
 
 import { useQuery } from "convex/react";
 
+import Publish from "./publish";
 import Banner from "./banner";
 import Title from "./title";
 import Menu from "./menu";
@@ -49,6 +50,7 @@ export default function Navbar({ isCollapsed, onResetWidth }: NavbarProps) {
         <div className="flex w-full items-center justify-between">
           <Title initialData={document} />
           <div className="flex items-center gap-x-2">
+            <Publish initialData={document} />
             <Menu documentId={document._id} />
           </div>
         </div>
