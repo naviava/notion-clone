@@ -12,7 +12,7 @@ import { ThemeProvider } from "@/components/providers/theme-provider";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Notion Clone",
+  title: "Quickscribe",
   description: "A Notion clone build using Next.js app router.",
   icons: {
     icon: [
